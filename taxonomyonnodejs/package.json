@@ -1,0 +1,15 @@
+{
+  "name":"taxonomyonnodejs",
+  "description":".",
+  "version":"0.1.0.beta1",
+  "author":"JackeyChan",
+
+  "dependencies": {
+    "express": ">= 2.0.0",
+    "jade": ">=0.9.1",
+    "mysql": ">= 0.9.1",
+  },
+  "keywords": [],
+  "main": "app.js",
+  "engines": { "node": ">= 0.4.1" }
+}

@@ -24,7 +24,7 @@ var _dbSettings = function (options) {
 	client.user = defaultOptions.user;
 	client.password = defaultOptions.pwd;
 	return client;
-}
+};
 
 var _dbConnect = function (options, callback) {
 	var client;
@@ -42,10 +42,10 @@ var _dbConnect = function (options, callback) {
 	else {
 		return null
 	}
-}
+};
 
 module.exports.Client = function (dbSettings, callback) {
 	return _dbConnect (dbSettings, callback);
-}
+};
 
 

@@ -19,6 +19,9 @@ var Db = db.Client(dbSettings, function (action, error, results) {
 			console.log('DB be selected');
 		}
 	}
+	if (error) {
+		db.end();
+	}
 });
 
 module.exports.DB = Db;

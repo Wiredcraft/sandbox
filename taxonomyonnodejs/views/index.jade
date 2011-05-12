@@ -1,2 +1,9 @@
 h1= title
 p Welcome to #{title}
+.taxonomy
+ .taxonomy-name
+  ul.terms
+    - each vocabulary in taxonomy
+      li.items
+        span #{vocabulary.vid}
+        p #{vocabulary.name}
