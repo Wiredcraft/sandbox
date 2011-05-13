@@ -5,5 +5,8 @@ p Welcome to #{title}
   ul.terms
     - each vocabulary in taxonomy
       li.items
-        span #{vocabulary.vid}
-        p #{vocabulary.name}
+        input(type:'hidden', value:vocabulary.vid)
+        span
+         | #{vocabulary.name}
+         strong.sub sub
+        a(href="#") Add

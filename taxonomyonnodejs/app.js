@@ -40,8 +40,9 @@ app.get('/', function(req, res){
   });
 });
 
+// Load all terms with vocabulary ID.
 app.get('/terms/:id', function (req, res) {
-   db.query("SELECT name FROM taxonomy_term_data ttd WHERE ttd.vid = " + req.params.id, function (error, results, fields) {
+   db.query("SELECT * FROM taxonomy_term_data ttd WHERE ttd.vid = " + req.params.id, function (error, results, fields) {
 	   if (!error && results.length > 0) {
 		   res.partial('terms', {
 			  terms:results
@@ -55,6 +56,67 @@ app.get('/terms/:id', function (req, res) {
    });
 });
 
+// The form for add term with special vocabulary ID.
+app.get('/term/:id/add', function (req, res) {
+	// Add.
+	if (req.query.addTerm == 'Add') {
+		taxonomy.save({vid:req.query.vid, tid: 0, name:req.query.name}, function (error, results) {
+			if (!error) {
+				/**res.partial('addterm', {
+					title: 'Add term',
+					vid: req.params.id,
+					tvalue:req.query.name,
+					name: 'name'
+				}, function (error, str) {
+					res.send({form:str});
+				});**/
+				res.partial('success', {
+					message:'success: add term'
+				});
+			}
+			else {
+				res.partial('error', {
+					message:error,
+					type:'error',
+					title: 'Error'
+				}, function (error, str) {
+					res.send({form:str});
+				});
+			}
+		});
+	}
+	else {
+		res.partial('addterm', {
+			title: 'Add term',
+			vid: req.params.id,
+			tvalue:'',
+			name: 'name'
+		}, function (error, str) {
+			if (!error) {
+				res.send({form:str});
+			}
+			else {
+				res.send({form:'error'});
+			}
+		});
+	}
+});
+
+// Edit term.
+app.get('/term/:id/edit', function (req, res) {
+	taxonomy.save({tid: req.params.id, name: req.query.name, vid:0}, function (error, results) {
+		if (!error) {
+			res.partial('success', {message: 'Edited'}, function (error, str) {
+				if (!error) {
+					res.send({data:str});
+				}
+				else {
+					res.send({data:"Have errors on the server:" + error});
+				}
+			});
+		}
+	});
+});
 // Only listen on $ node app.js
 
 if (!module.parent) {
