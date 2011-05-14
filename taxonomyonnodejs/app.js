@@ -30,11 +30,16 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res){
-  db.query("SELECT * FROM taxonomy_vocabulary", function (error, results, fields) {
-	  if (!error && results.length > 0) {
+	taxonomy.vocabularyLoad(1, function (error, results, fields) {
+	  if (!error) {
 		  res.render('index', {
 			  title:'Taxonomy',
 			  taxonomy:results
+		  });
+	  }
+	  else {
+		  res.render('error', {
+			  message: error
 		  });
 	  }
   });
@@ -42,7 +47,7 @@ app.get('/', function(req, res){
 
 // Load all terms with vocabulary ID.
 app.get('/terms/:id', function (req, res) {
-   db.query("SELECT * FROM taxonomy_term_data ttd WHERE ttd.vid = " + req.params.id, function (error, results, fields) {
+	taxonomy.termLoad({vid:parseInt(req.params.id)}, function (error, results, fields) {
 	   if (!error && results.length > 0) {
 		   res.partial('terms', {
 			  terms:results
@@ -60,7 +65,7 @@ app.get('/terms/:id', function (req, res) {
 app.get('/term/:id/add', function (req, res) {
 	// Add.
 	if (req.query.addTerm == 'Add') {
-		taxonomy.save({vid:req.query.vid, tid: 0, name:req.query.name}, function (error, results) {
+		taxonomy.termSave({vid:req.query.vid, tid: 0, name:req.query.name}, function (error, results) {
 			if (!error) {
 				/**res.partial('addterm', {
 					title: 'Add term',
@@ -104,7 +109,7 @@ app.get('/term/:id/add', function (req, res) {
 
 // Edit term.
 app.get('/term/:id/edit', function (req, res) {
-	taxonomy.save({tid: req.params.id, name: req.query.name, vid:0}, function (error, results) {
+	taxonomy.termSave({tid: req.params.id, name: req.query.name, vid:0}, function (error, results) {
 		if (!error) {
 			res.partial('success', {message: 'Edited'}, function (error, str) {
 				if (!error) {

@@ -45,25 +45,25 @@ taxonomy.termSave = function (data, callback) {
 			callback(error, results);
 		});
 	}
-}
+};
 
 taxonomy.termLoad = function (data, callback) {
 	// Term ID.
-	if ('integer' == typeof data) {
+	if ('number' == typeof data) {
 		this.client.query("SELECT * FROM taxonomy_term_data WHERE tid = ?", [data], function (error, results, fields) {
 			callback(error, results, fields);
-		});	
+		});
 	}
 	else if ('object' == typeof data) {
-		var sql = "SELECT * FROM taxonomy_term_data ttd";
+		var sql = "SELECT * FROM taxonomy_term_data";
 		var where = '';
 		var values = [];
 		for (var field in data) {
-			where += ' '+ field +' = ';
+			where += ' '+ field +' = ?';
 			values.push(data[field]);
 		}
 		if (where != '' && values.length > 0) {
-			sql += where;
+			sql += ' where ' + where;
 			this.client.query(sql, values, function (error, results, fields) {
 				callback(error, results, fields);
 			});
@@ -78,13 +78,13 @@ taxonomy.termLoad = function (data, callback) {
 
 taxonomy.vocabularyLoad = function (data, callback) {
 	// Term ID.
-	if ('integer' == typeof data) {
-		this.client.query("SELECT * FROM taxonomy_term ttd WHERE vid = ?", [data], function (error, results, fields) {
+	if ('number' == typeof data) {
+		this.client.query("SELECT * FROM taxonomy_vocabulary ttd WHERE vid = ?", [data], function (error, results, fields) {
 			callback(error, results, fields);
 		});	
 	}
 	else if ('object' == typeof data) {
-		var sql = "SELECT * FROM taxonomy_term";
+		var sql = "SELECT * FROM taxonomy_vocabulary";
 		var where = '';
 		var values = [];
 		for (var field in data) {
@@ -92,7 +92,7 @@ taxonomy.vocabularyLoad = function (data, callback) {
 			values.push(data[field]);
 		}
 		if (where != '' && values.length > 0) {
-			sql += where;
+			sql += ' where ' + where;
 			this.client.query(sql, values, function (error, results, fields) {
 				callback(error, results, fields);
 			});

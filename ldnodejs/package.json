@@ -1,0 +1,6 @@
+{
+  "name": "ldnodejs",
+  "version": "1.0.0",
+  "description": "Lanch drupal with nodejs command line",
+  "main": "index.js"
+}

@@ -8,19 +8,12 @@ var Client = require('mysql').Client;
  */
 var _dbSettings = function (options, callback) {
 	var client = new Client();
-	if ('object' == typeof options) {
-		for (var o in defaultOptions) {
-			if (options[o] != undefined) {
-				defaultOptions[o] = options[o];
-			}
-		}
-	}
-	else {
+	if ('object' != typeof options) {
 		callback('connection params must is object');
 		return;
 	}
-	client.user = defaultOptions.user;
-	client.password = defaultOptions.pwd;
+	client.user = options.user;
+	client.password = options.pwd;
 	return client;
 };
 
