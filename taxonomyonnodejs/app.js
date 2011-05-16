@@ -122,6 +122,21 @@ app.get('/term/:id/edit', function (req, res) {
 		}
 	});
 });
+
+app.get('/vocabulary/:id/edit', function (req, res) {
+	taxonomy.vocabularySave({vid:req.params.id, name:req.query.name}, function (error, results) {
+		if (!error) {
+			res.partial('success', {message:'Edit Vocabulary' + req.query.name}, function (error, str) {
+				if (!error) {
+					res.send({data:str});
+				}
+				else {
+					res.send({data: 'Have errors on the server: ' + error});
+				}
+			});
+		}
+	});
+});
 // Only listen on $ node app.js
 
 if (!module.parent) {

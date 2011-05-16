@@ -4,9 +4,9 @@
 $(function($){
   var baseContainer = $('div.taxonomy div.taxonomy-name ul.terms li.items');
 	// Load terms.
-  $('.sub', baseContainer).toggle(function () {
-	  var This = $(this).parent().parent();
-	  var tid = $('input:eq(0)', This).val();
+  $('.sub-items', baseContainer).toggle(function () {
+	  var This = $(this).parent();
+	  var tid = $(this).siblings('div.vocabulary-name').attr('ref');
 	  if ($('.sub-items-appended' + tid, This).length > 0) {
 		  return;
 	  }
@@ -20,7 +20,7 @@ $(function($){
 				  var This = $(this);
 				  var tmpThis = This.clone();
 				  var tid = This.attr('ref');
-				  replayField($(this), [{
+				  replaceField($(this), [{
 					  selector:$('li', $(this)),
 					  map: {
 						  type:'text',
@@ -60,14 +60,15 @@ $(function($){
 		  url:'/terms/' + tid
 	  });
   }, function () {
-	  var This = $(this).parent().parent();
-	  var tid = $('input:eq(0)', This).val();
+	  var This = $(this).parent();
+	  var tid = $(this).siblings('div.vocabulary-name').attr('ref');
 	  $('.sub-items-appended' + tid).remove();
   });
   
   // Add terms.
   $("a:eq(0)", baseContainer).click(function (e) {
 	  e.preventDefault();
+	  return;
 	  
 	  $.ajax({
 		  success:function (response, status) {
@@ -98,6 +99,37 @@ $(function($){
 		  url:'/term/' + $('input:eq(0)', $(this).parent()).val() + '/add'
 	  });
   });
+  
+  // Edit vocabulary
+  $('div.vocabulary-name', baseContainer).dblclick(function () {
+	  var This = $(this);
+	  var originObj = $(this).clone();
+	  var replaced = replaceField($(this), [
+		  {selector: null, map: {type:'text', name:'vocabulary', value:originObj.text()}},
+	  ], function (action,form, mapping) {
+		  if (action == 'save') {
+			  $.ajax({
+				  success:function (response, status) {
+					  if ('string' == typeof response) {
+						  response = $.parseJSON(response);
+					  }
+					  
+				  },
+				  complete: function (response, status) {
+					  
+				  },
+				  dataType:'json',
+				  type:'GET',
+				  data:{name:$("input[name='vocabulary']", form).val()},	
+				  url:'/vocabulary/' + This.attr('ref') + '/edit'
+			  });
+			  This.html($("input[name='vocabulary']", form).val());
+		  }
+		  else if (action == 'cancel') {
+			  This.html(originObj.text());
+		  }
+	  });
+  });
 })(jQuery);
 
 /**
@@ -107,7 +139,7 @@ $(function($){
  * @param callback
  *   When submit, execute this callback
  */
-function replayField(object, mapping, callback) {
+function replaceField(object, mapping, callback) {
 	var replayed = $('<div></div>');
 	for (var m in mapping) {
 		var field = $("<input></input>");
@@ -131,3 +163,4 @@ function replayField(object, mapping, callback) {
 	
 	object.html(replayed);
 }
+

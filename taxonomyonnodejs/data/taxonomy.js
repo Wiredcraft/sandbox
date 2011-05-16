@@ -115,7 +115,7 @@ taxonomy.vocabularySave = function (data, callback) {
 	else {
 		// Edit it.
 		this.client.query('UPDATE taxonomy_vocabulary SET name = ? WHERE vid = ?', [data.name, data.vid], function (error, results) {
-			callback(error, fields);
+			callback(error, data);
 		});
 	}
 }
