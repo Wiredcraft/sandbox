@@ -1,8 +1,545 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@charset 'utf-8';
+
+/**
+ *Copyright (c) 2011-04-09, W3cplus.com. All rights reserved
+ *Based on YIU and Eric Meyer
+ */
+
+/*Remove margin and padding*/ 
+body,div,dl,dt,dd,ul,ol,li,
+h1,h2,h3,h4,h5,h6,pre,code,
+form,fieldset,legend,input,button,
+textarea,p,blockquote,th,td {
+  margin:0;
+  padding:0;
 }
 
-a {
-  color: #00B7FF;
+/*Html5 elements for older browsers*/
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display:block;
+}
+
+blockquote, q { 
+	quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after { 
+	content:''; 
+	content:none;
+}
+
+:focus {
+	outline: 0;
+}
+
+address,caption,cite,code,
+dfn,em,strong,th,var,optgroup {
+	font-style: normal;
+	font-weight: weight;
+}
+
+abbr[title], 
+dfn[title] { 
+	border-bottom:1px dotted; 
+	cursor:help;
+}
+
+li {
+	list-style: none;
+}
+table { 
+	border-collapse:collapse; 
+	border-spacing:0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+code,kbd,samp,tt {
+	font-size: 100%;
+}
+
+input,button,textarea,
+select,optgroup,option {
+	font: inherit inherit inherit inherit;
+}
+
+input, 
+select { 
+	vertical-align:middle;
+}
+
+/*base style*/
+/**
+ *Font style 
+ */
+body {
+	font: 13px/1.5 sans-serif;
+	*font-size: small;/*for IE*/
+	*font-size: x-small;/*for IE in quirks mode*/
+}
+
+select,
+input,
+button,
+textarea {
+	font: 99% sans-serif;
+}
+
+pre,
+code,
+kbd,
+samp,
+tt {
+	font-family: monospace,sans-serif;
+}
+
+/*Headers(h1,h2,etc) have no default margin,you will want to define those yourself
+*Set body font 13px
+* PXtoEM conversion made simple:http://pxtoem.com
+* */
+h1 {
+	font-size: 1.846em;/*per:184.6% pix:24px*/
+}
+
+h2 {
+	font-size: 1.538em;/*Per:153.8% pix:20px*/
+}
+
+h3 {
+	font-size: 1.231em;/*per:123.1% pix:16px*/
+}
+
+h4 {
+	font-size: 1.154em;/*per:115.4% pix:15px*/
+}
+
+h5,
+h6 {
+	font-size: 1em;/*per:100% pix: 13px*/
+}
+
+/**
+ * minimal base styles
+ */
+html {
+	font-size: 100.01%;/*To Prevent bugs in IE and Opera*/
+	height: 100%;/*Using height 100% on html and body allows to style containers with a 100% height*/
+	overflow-y: scroll;/*The overflow declaration is to make sure there is a gutter for the scollbar in all browsers regardless of content*/
+}
+
+body {
+	background-color: #252018;/*Not all browsers set white as the default background color*/
+	color: #F6E6CC;/*#444 looks better than black*/
+	height: 100%;
+}
+
+/*Elements have bold*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+th,
+dt,
+b {
+	font-weight: bold;
+}
+
+/*Links
+ *Styling for links and visited links as well as for links in a hovred,focus and active state
+ * make sure to keep these rules in that order, with :active being last
+ */
+a,
+a:link {
+	color: #ace;/*you will want to change the color*/
+	outline: none;
+}
+a:link {
+	-webkit-tap-highlight-color: #ff5e99;/*you will want to change the color*/
+}
+a:visited {
+	text-decoration: none;
+	outline: none;
+}
+a:hover {
+	text-decoration: underline;/*add a bottom line for text*/
+}
+a:focus,
+:focus {
+	outline: thin dotted;
+}
+a:hover,
+a:active {
+	outline: none;
+}
+
+/*List item*/
+li {
+	list-style: none outside none;
+}
+
+
+/*This is to prevent border from showing around fieldset and images*/
+fieldset,
+img {
+	border: none 0;
+}
+
+/*This is to prevent a gap from showing below images in some browsers*/
+img {
+	vertical-align: bottom;
+	-ms-interpolation-mode: bicubic;/*bicubic resizing for non-native sized IMG*/
+}
+
+pre {
+	white-space: pre;/*CSS2*/
+	white-space: pre-wrap;/*CSS2.1*/
+	white-space: pre-line;/*CSS3*/
+	word-wrap: break-word;/*IE*/
+}
+
+/*set sub,sup without affecting line-height*/
+sub,
+sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+}
+
+sub {
+	top: -0.5em;
+}
+
+sup {
+	bottom: -0.25em;
+}
+
+small {
+	font-size: 85%;
+}
+
+/*Clear floats 
+ *The Magnificent CLEARFIX:Updated fo prevent margin-collapsing on child elements 
+ */
+.clearfix:before,
+.clearfix:after {
+	content:"\0020";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.clearfix {
+	zoom: 1;/*IE<8*/
+}
+
+.clearfix:after {
+	clear: both;
+}
+* html .clearfix { 
+	zoom: 1; /* IE6 */
+} 
+*:first-child+html .clearfix { 
+	zoom: 1; /* IE7 */
+} 
+
+/*Hide only visually,but have it available for screenreaders*/
+.hidden {
+	border: 0 !important;
+	clip: rect(1px 1px 1px 1px);/*IE<8*/
+	clip: rect(1px,1px,1px,1px);
+	height: 1px !important;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0 !important;
+	position: absolute !important;
+	width: hidden;
+}
+
+/*
+ *Table
+ **/
+
+/*All th should be centered unless they are in tbody*/
+th {
+	text-align: center;
+}
+
+tbody th {
+	text-align: left;
+}
+
+td {
+	vertical-align: top;
+}
+/**
+ * Form elements
+ */
+form {
+	overflow: visible;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline-width: 0;/*No outline border for Safary*/
+}
+
+input[type="text"],
+input[type="password"],
+input[type="select"],
+input[type="search"],
+input[type="file"],
+textarea,
+select {
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-color: #c4c4c4 #e9e9e9 #e9e9e9 #c4c4c4;/*you will change the color*/
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px 5px;
+	color: #777;
+	font-size: 12px;
+	width: 35%;
+}
+
+input:focus,
+textarea:focus { 
+	-webkit-box-shadow:0 0 2px rgba(196,196,196,0.5);
+	box-shadow:0 0 2px rgba(196,196,196,0.5);
+	-webkit-focus-ring-color:none;
+	border-color:#c4c4c4;
+	background-color:#FFFFF0;
+}
+
+label {
+	font-weight: normal;
+}
+
+label.required:after { 
+	content:"*";
+	color:red;
+	font-family:"Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+}
+
+fieldset {
+	line-height: 1;/*line height helps to set the vertical alignment of radio buttons and check boxes*/
+}
+
+input[type="checkbox"] {
+	vertical-align: bottom;/*Vertical alignment of checkboxes*/
+	*vertical-align: baseline;/*IE7*/
+}
+
+input[type="radio"] {
+	vertical-align: text-bottom;/*Vertical alignment of radio buttons*/
+}
+
+input {
+	_vertical-align: text-bottom;/*Vertical alignment of input fields for IE6*/
+}
+
+select {
+	background-color: transparent;/*In Webkit/Mac, select fails to inherit color,font-*,etc if there is no other styling like background for example(border will do to)*/
+}
+
+/* Make button nice in IE
+ *This is to fix IE6 and IE7 which create extra right/left padding on buttons
+ * IMPORTANT: because IE6 does not understand the selector like input[type="button"],so you need to apply the class "form-btn" to all input of tpye="button" in your documents
+ */
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+.form-btn {
+	width: auto;
+	*width: 0;
+	overflow: visible;
+}
+
+/*Hand cursor on clickable input elements*/
+label,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="image"],
+button {
+	cursor: pointer;
+}
+
+/*Webkit browsers add a 2px margin outside the chrome of form elements*/
+button,
+input,
+select,
+textarea {
+	margin: 0;
+}
+
+/* colors for form validity */
+input:valid, textarea:valid   {  }
+input:invalid, textarea:invalid {
+  border-radius: 1px;
+  -webkit-border-radius: 1px;
+	-webkit-box-shadow: 0px 0px 5px red;
+  box-shadow: 0px 0px 5px red;
+}
+
+
+/*Remove Textarea Scrollbars in IE*/
+textarea {
+	overflow: auto;
+}
+
+legend {
+	*margin-left: -7px; /*IE<8, thnx ivannikolic*/
+}
+
+/**
+  page style
+*/
+
+.body {
+  border: 10px solid rgba(109, 109, 109,0.6);
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: 0 0 3px rgba(211, 164, 89,0.6);
+  -webkit-box-shadow: 0 0 3px rgba(211, 164, 89,0.6);
+  box-shadow: 0 0 3px rgba(211, 164, 89,0.6);
+  padding: 10px;
+  width: 780px;
+  margin: 30px auto;
+}
+
+.body h1 {
+  color: #D7AF72;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6),2px 2px 0 rgba(255, 255, 255, 0.4),3px 3px 0 rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  font-weight: normal;
+  text-decoration: none;
+  font-size: 60px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.body p {
+  color: #A1804C;
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 16px;
+}
+
+.taxonomy ul li .item-box {
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.taxonomy ul li .item-box div {
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 18px;  
+}
+
+.sub-items {
+  background:  rgba(162, 107, 20, 0.3);
+  -moz-border-radius: 0.4em;
+  -webkit-border-radius: 0.4em;
+  border-radius: 0.4em;
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+  padding: 8px 10px 6px;
+  text-decoration: none;
+  float: left;
+  color: #D3A459;
+  text-transform: uppercase;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.sub-items:hover {
+  background:  rgba(162, 107, 20, 0.2);  
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 2px rgba(125,125,125,0.03);
+}
+
+.vocabulary-name {
+  float: left;
+  background: rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 0.4em;
+  -webkit-border-radius: 0.4em;
+  border-radius: 0.4em;
+  -moz-box-shadow: inset 0 0 5px rgba(255,255,255.0.3),0 0 8px rgba(255,255,255,0.15),1px 1px 10px rgba(0,0,0,0.05);
+  -wbkit-box-shadow: inset 0 0 5px rgba(255,255,255.0.3),0 0 8px rgba(255,255,255,0.15),1px 1px 10px rgba(0,0,0,0.05);
+  box-shadow: inset 0 0 5px rgba(255,255,255.0.3),0 0 8px rgba(255,255,255,0.15),1px 1px 10px rgba(0,0,0,0.05);
+  border-radius: 0.4em;
+  color: #FFFFFF;
+  padding: 8px 10px;
+  
+}
+
+.sub-items-appended1 {  
+  clear: both;
+  margin: 10px 10px 10px 12em;
+  border-left: 8px solid rgba(255,255,255,0.3);
+  padding: 10px;
+}
+
+.sub-items-appended1 li {
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  -moz-box-shadow: inset 0 0 3px bgba(125,125,125,0.5),0 0 6px bgba(125,125,125,0.2),0 0 10px bgba(125,125,125,0.05),-2px -2px 6px bgba(255,255,255,0.05);
+  -webkit-box-shadow: inset 0 0 3px bgba(125,125,125,0.5),0 0 6px bgba(125,125,125,0.2),0 0 10px bgba(125,125,125,0.05),-2px -2px 6px bgba(255,255,255,0.05);
+  box-shadow: inset 0 0 3px bgba(125,125,125,0.5),0 0 6px bgba(125,125,125,0.2),0 0 10px bgba(125,125,125,0.05),-2px -2px 6px bgba(255,255,255,0.05);
+  padding: 20px;
+  overflow: hidden;
+  
+}
+
+.taxonomy input[type="text"] {
+    width: 200px;
+    border: 1px solid rgba(0, 134, 195,0.06);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 3px 5px;
+    font-size: 13px;
+    background: rgba(255,255,255,0.03);
+    margin-right: 12px;
+    color: #fff;
+    text-shadow: 0 1px 0 rbga(255, 207, 21,0.03);
+}
+
+.taxonomy input[type="text"]:hover,
+.taxonomy input[type="text"]:focus {
+  border-color: rgba(0,134,195,0.1);
+  -moz-box-shadow: inset 0 0 3px rgba(255,255,255,0.5),0 0 6 rgba(0, 134, 195,0.3);
+  -webkit-box-shadow: inset 0 0 3px rgba(255,255,255,0.5),0 0 6 rgba(0, 134, 195,0.3);
+  box-shadow: inset 0 0 3px rgba(255,255,255,0.5),0 0 6 rgba(0, 134, 195,0.3);
+}
+
+
+.taxonomy input[type="button"] {
+  background: rgba(0,0,0,0.03);
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  border-radius:3px;
+  padding: 5px 10px;
+  color: rgb(211, 164, 89);
+  text-shadow: -1px 1px 0 rgba(0,0,0,0.03),1px -1px 0 rgba(0,0,0,0.05),0 0 1px rgba(0,0,0,0.07);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 0 0 5px rgba(0 0 0,0.034), 0 0 10px rgba(255,255,255,0.035);
+  margin-right: 20px;
 }
