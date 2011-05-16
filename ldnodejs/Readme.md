@@ -1,2 +1,0 @@
-Lanch drupal with nodejs.
-
