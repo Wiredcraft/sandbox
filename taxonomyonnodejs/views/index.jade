@@ -1,12 +1,13 @@
-h1= title
-p Welcome to #{title}
-.taxonomy
- .taxonomy-name
-  ul.terms
-    - each vocabulary in taxonomy
-      li.items
-       .item-box
-        div.sub-items plus
-        input(type:'hidden', value:vocabulary.vid)
-        div(class:'vocabulary-name', ref:vocabulary.vid)
-         | #{vocabulary.name}
+.body
+ h1= title
+ p Welcome to #{title}
+ .taxonomy
+  .taxonomy-name
+   ul.terms
+     - each vocabulary in taxonomy
+       li.items
+        .item-box
+         div.sub-items plus
+         input(type:'hidden', value:vocabulary.vid)
+         div(class:'vocabulary-name', ref:vocabulary.vid)
+          | #{vocabulary.name}
