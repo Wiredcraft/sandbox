@@ -5,7 +5,8 @@
   "author": "JackeyChan <a397420507@gmail.com>",
   "dependencies": {
     "express": ">= 2.2.2",
-    "mysql": ">= 0.9.1"
+    "mysql": ">= 0.9.1",
+    "jade": ">= 0.11.0"
   },
   "keywords": ["wiredcraft", "nodejs", "drupal"],
   "main": "app.js",
