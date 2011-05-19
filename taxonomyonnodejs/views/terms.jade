@@ -1,3 +1,13 @@
 ul.sub-terms
   - each term in terms
    li(ref=term.tid)= term.name
+  div.add-term-form
+   form(action:'term/0/add', method:"get")
+    div.term-name
+     label(for:'name') Term:
+     input(name:'name', type:'text')
+    div.vocabulary-id
+     input(name:'vid', value:vid, type:'hidden')
+    div.submit
+     input(name:'save', value:'Add', type:'submit')
+    

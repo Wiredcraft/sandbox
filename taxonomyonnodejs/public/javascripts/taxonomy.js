@@ -4,7 +4,37 @@
 $(function($){
   var baseContainer = $('div.taxonomy div.taxonomy-name ul.terms li.items');
 	// Load terms.
-  $('.sub-items', baseContainer).toggle(function () {
+  $('.sub-items', baseContainer).toggle(loadSubterms , cleanSubterms);
+  
+  // Edit vocabulary
+  $('div.vocabulary-name', baseContainer).dblclick(function () {
+	  var This = $(this);
+	  var originObj = $(this).clone();
+	  var loadedForm = new AjaxForm({
+		  url:'/load/part', 
+		  formID:'addVocabulary', 
+		  options:{name:originObj.text(), vid:originObj.attr('ref')}});
+	  
+	  /** Add listener on the form **/
+	  // Add loaded event listener
+	  loadedForm.on('loaded', function (data) {
+		  This.html(data.form);
+	  });
+	  // Add success event listener
+	  loadedForm.on('success', function (data) {
+		  This.append(data.response.data);
+		  window.setTimeout(function () {
+			  This.html(originObj);
+		  }, 1.5 * 1000);
+	  });
+  });
+});
+
+
+/**
+ * Load sub items
+ */
+function loadSubterms () {
 	  var This = $(this).parent();
 	  var tid = $(this).siblings('div.vocabulary-name').attr('ref');
 	  if ($('.sub-items-appended' + tid, This).length > 0) {
@@ -16,38 +46,30 @@ $(function($){
 				  response = $.parseJSON(response);
 			  }
 			  var terms = $(response.data);
+			  // Add submit ajax hander for form
+			  var termAddForm = new AjaxForm($('form', terms));
+			  terms.AddForm.on('success', function (data) {
+				  
+			  });
 			  $('li', terms).dblclick(function () {
 				  var This = $(this);
 				  var tmpThis = This.clone();
 				  var tid = This.attr('ref');
-				  replaceField($(this), [{
-					  selector:$('li', $(this)),
-					  map: {
-						  type:'text',
-						  name:'name',
-						  value:This.text()
-					  }
-				  }, {selector: null, map:{type:'hidden', name:'tid', value:tid}}], function (action, form, mapping) {
-					  if (action == 'save') {
-						 $.ajax({
-							 success: function (response, status) {
-								 if ('string' == typeof response) {
-									  response = $.parseJSON(response);
-								 }
-								 form.append(response.data);
-								 window.setTimeout(function (form) {
-									 This.html($("input[name='name']", form).val());
-								 }, 1000, form);
-							 },
-							 data:{tid: tid, name:$("input[name='name']", form).val()},
-							 dataType:'json',
-							 type:'GET',
-							 url:'term/' + tid + "/edit"
-						 });
-					  }
-					  else if (action == 'cancel') {
+				  var form = new AjaxForm({
+					  url:'/load/part',
+					  formID:'addterm',
+					  options:{tvalue:This.text(), tid:tid}
+				  });
+				  form.on('loaded', function (data) {
+					 This.html(data.form);
+				  });
+				  
+				  // Add success event listener
+				  form.on('success', function (data) {
+					  This.append(data.response.data);
+					  window.setTimeout(function () {
 						  This.html(tmpThis);
-					  }
+					  }, 1.5 * 1000);
 				  });
 			  });
 			 This.append($('<div class="sub-items-appended'+ tid +'"></div>').append(terms));
@@ -59,108 +81,13 @@ $(function($){
 		  type:'GET',
 		  url:'/terms/' + tid
 	  });
-  }, function () {
-	  var This = $(this).parent();
-	  var tid = $(this).siblings('div.vocabulary-name').attr('ref');
-	  $('.sub-items-appended' + tid).remove();
-  });
-  
-  // Add terms.
-  $("a:eq(0)", baseContainer).click(function (e) {
-	  e.preventDefault();
-	  return;
-	  
-	  $.ajax({
-		  success:function (response, status) {
-			  if ('string' == typeof response) {
-				  response = $.parseJSON(response);
-			  }
-			  var form = $(response.form);
-			  $('input:submit', form).click(function (e) {
-				  e.preventDefault();
-			  });
-			  form.dialog({
-				  modal:true,
-				  buttons:{
-					  Cancel: function () {
-						  $(this).dialog('close');
-					  }
-				  },
-				  close: function () {
-					  
-				  }
-			  });
-		  },
-		  complete: function (response, status) {
-			  
-		  },
-		  dataType:'json',
-		  type:'GET',
-		  url:'/term/' + $('input:eq(0)', $(this).parent()).val() + '/add'
-	  });
-  });
-  
-  // Edit vocabulary
-  $('div.vocabulary-name', baseContainer).dblclick(function () {
-	  var This = $(this);
-	  var originObj = $(this).clone();
-	  var replaced = replaceField($(this), [
-		  {selector: null, map: {type:'text', name:'vocabulary', value:originObj.text()}},
-	  ], function (action,form, mapping) {
-		  if (action == 'save') {
-			  $.ajax({
-				  success:function (response, status) {
-					  if ('string' == typeof response) {
-						  response = $.parseJSON(response);
-					  }
-					  
-				  },
-				  complete: function (response, status) {
-					  
-				  },
-				  dataType:'json',
-				  type:'GET',
-				  data:{name:$("input[name='vocabulary']", form).val()},	
-				  url:'/vocabulary/' + This.attr('ref') + '/edit'
-			  });
-			  This.html($("input[name='vocabulary']", form).val());
-		  }
-		  else if (action == 'cancel') {
-			  This.html(originObj.text());
-		  }
-	  });
-  });
-})(jQuery);
+};
 
 /**
  * 
- * @param mapping
- *   mapping: [{selector: 'selector', map:{type, name, value}}, ...];
- * @param callback
- *   When submit, execute this callback
  */
-function replaceField(object, mapping, callback) {
-	var replayed = $('<div></div>');
-	for (var m in mapping) {
-		var field = $("<input></input>");
-		field.attr('type', mapping[m].map.type);
-		field.attr('name', mapping[m].map.name);
-		field.attr('value', mapping[m].map.value != undefined ? mapping[m].map.value: $(seletor).text());
-		replayed.append(field);
-	}
-	var save = $('<input></input>').attr({type:'button', value:'Edit'});
-	replayed.append(save);
-	var cancel = $('<input></input>').attr({type:'button', value:'Cancel'});
-	replayed.append(cancel);
-	
-	save.click(function () {
-		callback('save', replayed, mapping);
-	});
-	
-	cancel.click(function () {
-		callback('cancel', replayed, mapping);
-	});
-	
-	object.html(replayed);
+function cleanSubterms () {
+	var This = $(this).parent();
+    var tid = $(this).siblings('div.vocabulary-name').attr('ref');
+    $('.sub-items-appended' + tid).remove();
 }
-

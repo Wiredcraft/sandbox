@@ -55,7 +55,7 @@ taxonomy.termLoad = function (data, callback) {
 		});
 	}
 	else if ('object' == typeof data) {
-		var sql = "SELECT * FROM taxonomy_term_data";
+		var sql = "SELECT * FROM taxonomy_term_data";	
 		var where = '';
 		var values = [];
 		for (var field in data) {
@@ -64,6 +64,7 @@ taxonomy.termLoad = function (data, callback) {
 		}
 		if (where != '' && values.length > 0) {
 			sql += ' where ' + where;
+			sql += ' ORDER BY tid ASC';
 			this.client.query(sql, values, function (error, results, fields) {
 				callback(error, results, fields);
 			});
@@ -106,10 +107,12 @@ taxonomy.vocabularyLoad = function (data, callback) {
 };
 
 taxonomy.vocabularySave = function (data, callback) {
+	console.log(data);
 	if (data.vid == 0) {
 		// Insert it.
-		this.client.query("INSERT INTO taxonomy_vocabulary (name, machine_name, description, module, weight) VALUES(?, ?, 'Added by nodejs', 'taxonomy', 0)", [data.name, unilt(data.name)], function (error, results) {
-			callback(error, fields);
+		console.log('insert');
+		this.client.query("INSERT INTO taxonomy_vocabulary (name, machine_name, description, module, weight) VALUES(?, ?, 'Added by nodejs', 'taxonomy', 0)", [data.name, unilt.underscore(data.name)], function (error, results) {
+			callback(error, results);
 		});
 	}
 	else {
@@ -118,5 +121,5 @@ taxonomy.vocabularySave = function (data, callback) {
 			callback(error, data);
 		});
 	}
-}
+};
 
